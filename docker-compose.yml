@@ -1,0 +1,34 @@
+version: '3.1'
+networks:
+  bookmedik-network:
+services:
+  app:
+    container_name: cont_bookmedik
+    image: jesusvg97/bookmedik:v1
+    restart: always
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    networks:
+      - bookmedik-network
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+  db:
+    container_name: cont_mariadb
+    image: mariadb
+    restart: always
+    environment:
+      - MARIADB_DATABASE=${MARIA_DB_DATABASE}
+      - MARIADB_USER=${MARIA_DB_USER}
+      - MARIADB_PASSWORD=${MARIA_DB_PASSWORD}
+      - MARIADB_ROOT_PASSWORD=${MARIA_DB_ROOT_PASSWORD}
+    networks:
+      - bookmedik-network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+volumes:
+    mariadb_data:
